@@ -3,9 +3,5 @@ fn main() {
     
     let mut arr = [1,2,3,4];
     
-    for(i=1..5) {
-        println!(arr[i])
-    }
-    
-
-}
+    let mut s = String::from("Hello World");
+}    
