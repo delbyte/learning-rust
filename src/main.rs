@@ -12,5 +12,9 @@ fn main() {
     for i in (1..10) {
         println!("TLDR{i}")
     }
+
+    fn calculate_length(s: &String) -> usize {
+        s.len()
+    }
 }
 
