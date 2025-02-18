@@ -53,3 +53,21 @@ Mutable-
 let mut apples = 5;
 ```
 
+**Loops** 
+```
+loop(){
+}
+``` 
+Loops Infinite Times
+
+
+
+
+
+
+
+
+
+
+
+
