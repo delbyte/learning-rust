@@ -8,4 +8,9 @@ fn main() {
     for i in arr{
         println!("The element is {i}")
     }
-}    
+
+    for i in (1..10) {
+        println!("TLDR{i}")
+    }
+}
+
