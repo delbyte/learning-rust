@@ -1,3 +1,5 @@
+use std::cell;
+
 fn main() {
     println!("Hello, world!");
     
@@ -13,7 +15,9 @@ fn main() {
         println!("TLDR{i}")
     }
 
-    fn calculate_length(s: &String) -> usize {
+    let mut name = String:from("name")
+    println!(calculate_length(name))
+    fn calculate_length(s: String) -> usize {
         s.len()
     }
 }
