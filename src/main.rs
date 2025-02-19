@@ -1,25 +1,22 @@
-use std::io;
-
-fn main() {
-    println!("Hello, world!");
-    
-    let arr = [1,2,3,4];
-    
-    let s = String::from("Hello World");
-
-    for i in arr{
-        println!("The element is {i}")
+fn is_prime(num: i32) -> bool {
+    if num <= 1 {
+        return false;
     }
-
-    for i in 1..10 {
-        println!("TLDR{i}")
+    let mut i = 2;
+    while i * i <= num {
+        if num % i == 0 {
+            return false;
+        }
+        i += 1;
     }
-
-    fn calculate_length(s: &String) -> usize {
-        return s.len();
-    }
-    let name = String::from("name");
-    println!("{}", calculate_length(&name));
-
+    true
 }
 
+fn main() {
+    let x = 13;
+    if is_prime(x) {
+        println!("The number is prime.");
+    } else {
+        println!("The number is not prime.");
+    }
+}
