@@ -12,6 +12,23 @@ fn main() {
   if operator == '+' {
     println!("{sfirstnum}+{sthirdnum}={}", firstnum+thirdnum);
     }
-  elif operator == '-' {
+  else if operator == '-' {
     println!("{sfirstnum}-{sthirdnum}={}", firstnum-thirdnum);
+    }
+  else if operator == '*' {
+    println!("{sfirstnum}*{sthirdnum}={}", firstnum*thirdnum);
+    }
+  else if operator == '/' {
+    if thirdnum == 0 {
+      println!("Cannot divide by 0");
+      }
+    else {
+      println!("{sfirstnum}/{sthirdnum}={}", firstnum/thirdnum);
+      }
+    }
+  else {
+    println!("INVALID OPERATOR");
+    }
+}
+
     
