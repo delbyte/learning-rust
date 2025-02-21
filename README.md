@@ -27,7 +27,7 @@ Use `cargo build --release` when all of your code is finished for the project. C
 
 ### Code stuff
 
-Use libraries in your program 
+#### Use libraries in your program 
 ```
 use std::io;
 ```
@@ -53,7 +53,7 @@ Mutable-
 let mut apples = 5;
 ```
 
-**Loops** 
+#### **Loops** 
 ```
 loop(){
 }
@@ -66,6 +66,14 @@ for i in list {
 ```
 Loops through list 
 
+```
+while (condition) {
+}
+
+```
+Loops while condition is true
+
+#### Accepting Command Line Arguments
 
 
 
