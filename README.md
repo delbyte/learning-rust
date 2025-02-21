@@ -60,8 +60,11 @@ loop(){
 ``` 
 Loops Infinite Times
 
-
-
+``` 
+for i in list {
+}
+```
+Loops through list 
 
 
 
