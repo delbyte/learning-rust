@@ -76,7 +76,7 @@ Loops while condition is true
 #### Accepting Command Line Arguments
 ```
 use std::env; 
-let args: Vec<String> = env::args.collect();
+let args: Vec<String> = env::args().collect();
 ```
 
 
