@@ -23,7 +23,7 @@ fn main() {
         println!("Current tasks:\n");
         
         for (num, task) in tasks.iter().enumerate() {
-            println!("{num}. {task}\n");
+            println!("{num+1}. {task}\n");
         }
 
     }
