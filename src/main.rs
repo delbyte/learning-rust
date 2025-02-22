@@ -18,9 +18,14 @@ fn main() {
 
         println!("Current tasks:\n");
         
-        for task in tasks {
-            println!("{task}\n");
+        for (num, task) in tasks.iter().enumerate() {
+            println!("{num}. {task}\n");
         }
+
+    }
+
+    if iter[0] == "Complete" {
+        
 
     }
 }
