@@ -1,3 +1,4 @@
+use core::task;
 use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect(); 
@@ -39,6 +40,7 @@ fn main() {
     }
 
     if iter[0] == "Remove" {
+        let task_string = taskiter.join(" ");
         
     }
 }
