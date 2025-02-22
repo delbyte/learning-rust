@@ -1,6 +1,4 @@
-use core::task;
 use std::env;
-use std::io;
 fn main() {
     let args: Vec<String> = env::args().collect(); 
     let iter = &args[1..];
@@ -8,6 +6,11 @@ fn main() {
 
     let mut tasks: Vec<String> = Vec::new();
     
+    if iter.is_empty() {
+        eprintln!("Usage: <Command> <Task>");
+        return;
+    }
+
     if iter[0] == "Add" {
         
         let task_string = taskiter.join(" ");
@@ -25,8 +28,14 @@ fn main() {
     }
 
     if iter[0] == "Complete" {
+        let task_string = taskiter.join(" ");
         
-
+        if let Some(task_pos) = tasks.iter().position(|r| r == &task_string) {
+            tasks[task_pos] = format!("{} [complete]", tasks[task_pos]);
+            println!("Task marked as complete!");
+        } else {
+            println!("Task not found: {}", task_string);
+        }
     }
 }
 
