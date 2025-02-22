@@ -37,6 +37,10 @@ fn main() {
             println!("Task not found: {}", task_string);
         }
     }
+
+    if iter[0] == "Remove" {
+        
+    }
 }
 
 
