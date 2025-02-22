@@ -41,7 +41,13 @@ fn main() {
 
     if iter[0] == "Remove" {
         let task_string = taskiter.join(" ");
-        
+
+        if let Some(task_pos) = tasks.iter().position(|r|r == &task_string) {
+            println!("Removed task: {task_string}");
+            tasks.remove(task_pos);
+        } else {
+            println!("Task not found: {task_string}");
+        }        
     }
 }
 
