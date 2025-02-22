@@ -1,4 +1,5 @@
 use std::env;
+use std::io;
 fn main() {
     let args: Vec<String> = env::args().collect(); 
     let iter = &args[1..];
@@ -6,6 +7,18 @@ fn main() {
     let mut tasks: Vec<String> = Vec::new();
     
     if iter[0] == "Add" {
+        println!("Add task:\n");
+        let mut new_task = String::new();
+
+        new_task.clear();
+        io::stdin().read_line(&mut new_task).unwrap();
+        tasks.push(new_task);
+
+        println!("Current tasks:\n");
+        
+        for task in tasks {
+            println!("{task}\n");
+        }
 
     }
 }
