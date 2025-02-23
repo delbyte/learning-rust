@@ -23,7 +23,7 @@ fn main() {
         println!("Current tasks:\n");
         
         for (num, task) in tasks.iter().enumerate() {
-            println!("{num+1}. {task}\n");
+            println!("{}. {task}\n", num+1);
         }
 
     }
@@ -47,7 +47,7 @@ fn main() {
             tasks.remove(task_pos);
         } else {
             println!("Task not found: {task_string}");
-        }        
+        }
     }
 }
 
