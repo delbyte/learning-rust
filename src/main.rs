@@ -29,7 +29,10 @@ fn main() {
         task_string = format!("{} [pending]", task_string);
 
         tasks.push(task_string);
-        data.write_all(task_string)?;
+        
+        data.write_all(task_string.as_bytes())
+            .expect("Failed to write to file.");
+
         println!("Task added!");
 
 
