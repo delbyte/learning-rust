@@ -14,7 +14,8 @@ fn main() {
 
     if iter[0] == "Add" {
         
-        let task_string = taskiter.join(" ");
+        let mut task_string = taskiter.join(" ");
+        task_string = format!("{} [pending]", task_string);
 
         tasks.push(task_string);
         println!("Task added!");
@@ -28,7 +29,7 @@ fn main() {
 
     }
 
-    if iter[0] == "Complete" {
+    else if iter[0] == "Complete" {
         let task_string = taskiter.join(" ");
         
         if let Some(task_pos) = tasks.iter().position(|r| r == &task_string) {
@@ -39,7 +40,7 @@ fn main() {
         }
     }
 
-    if iter[0] == "Remove" {
+    else if iter[0] == "Remove" {
         let task_string = taskiter.join(" ");
 
         if let Some(task_pos) = tasks.iter().position(|r|r == &task_string) {
