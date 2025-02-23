@@ -8,7 +8,8 @@ fn main() {
         .read(true)
         .write(true)
         .create(true)
-        .open("data.txt");
+        .open("data.txt")
+        .expect("Failed to open file.\n");
 
 
     let args: Vec<String> = env::args().collect(); 
@@ -28,6 +29,7 @@ fn main() {
         task_string = format!("{} [pending]", task_string);
 
         tasks.push(task_string);
+        data.write_all(task_string)?;
         println!("Task added!");
 
 
