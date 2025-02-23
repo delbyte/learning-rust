@@ -4,6 +4,13 @@ use core::task;
 use std::env;
 
 fn main() {
+    let mut data = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open("data.txt");
+
+
     let args: Vec<String> = env::args().collect(); 
     let iter = &args[1..];
     let taskiter = &iter[1..];
