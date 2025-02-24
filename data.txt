@@ -1,0 +1,1 @@
+Add some sort of clock that will ping you on startup with status updates on todo [pending]
