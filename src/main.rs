@@ -1,68 +1,119 @@
-use std::fs::OpenOptions;
-use std::io::Write;
-use core::task;
+use std::fs::{OpenOptions, File};
+use std::io::{Write, BufRead, BufReader};
 use std::env;
 
+const FILE_PATH: &str = "data.txt";
+
 fn main() {
-    let mut data = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open("data.txt")
-        .expect("Failed to open file.\n");
-
-
-    let args: Vec<String> = env::args().collect(); 
+    let args: Vec<String> = env::args().collect();
     let iter = &args[1..];
-    let taskiter = &iter[1..];
 
-    let mut tasks: Vec<String> = Vec::new();
-    
     if iter.is_empty() {
         eprintln!("Usage: <Command> <Task>");
         return;
     }
 
-    if iter[0] == "Add" {
-        
-        let mut task_string = taskiter.join(" ");
-        task_string = format!("{} [pending]", task_string);
+    match iter[0].as_str() {
+        "Add" => add_task(&iter[1..]),
+        "Complete" => complete_task(&iter[1..]),
+        "Remove" => remove_task(&iter[1..]),
+        _ => eprintln!("Invalid command. Use 'Add', 'Complete', or 'Remove'."),
+    }
+}
 
-        tasks.push(task_string);
-        
-        data.write_all(task_string.as_bytes())
-            .expect("Failed to write to file.");
+//Function to read all tasks from file
+fn read_tasks() -> Vec<String> {
+    let file = File::open(FILE_PATH).unwrap_or_else(|_| File::create(FILE_PATH).expect("Failed to create file"));
+    BufReader::new(file).lines().filter_map(Result::ok).collect()
+}
 
-        println!("Task added!");
+//Function to write tasks back to file (after modification)
+fn write_tasks(tasks: &[String]) {
+    let mut file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(FILE_PATH)
+        .expect("Failed to open file for writing");
 
+    for task in tasks {
+        writeln!(file, "{}", task).expect("Failed to write to file.");
+    }
+}
 
-        println!("Current tasks:\n");
-        
+//Add Task
+fn add_task(task_parts: &[String]) {
+    if task_parts.is_empty() {
+        eprintln!("Usage: Add <Task>");
+        return;
+    }
+
+    let task_string = format!("{} [pending]", task_parts.join(" "));
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .create(true)
+        .open(FILE_PATH)
+        .expect("Failed to open file.");
+
+    writeln!(file, "{}", task_string).expect("Failed to write to file.");
+
+    println!("Task added!");
+
+    display_tasks();
+}
+
+//Complete Task
+fn complete_task(task_parts: &[String]) {
+    if task_parts.is_empty() {
+        eprintln!("Usage: Complete <Task>");
+        return;
+    }
+
+    let mut tasks = read_tasks();
+    let search_string = task_parts.join(" ");
+
+    if let Some(pos) = tasks.iter().position(|task| task.starts_with(&search_string)) {
+        tasks[pos] = format!("{} [complete]", search_string);
+        write_tasks(&tasks);
+        println!("Task marked as complete!");
+    } else {
+        println!("Task not found: {}", search_string);
+    }
+
+    display_tasks();
+}
+
+//Remove Task
+fn remove_task(task_parts: &[String]) {
+    if task_parts.is_empty() {
+        eprintln!("Usage: Remove <Task>");
+        return;
+    }
+
+    let mut tasks = read_tasks();
+    let search_string = task_parts.join(" ");
+
+    if let Some(pos) = tasks.iter().position(|task| task.starts_with(&search_string)) {
+        println!("Removed task: {}", tasks[pos]);
+        tasks.remove(pos);
+        write_tasks(&tasks);
+    } else {
+        println!("Task not found: {}", search_string);
+    }
+
+    display_tasks();
+}
+
+//Display All Tasks
+fn display_tasks() {
+    let tasks = read_tasks();
+    println!("\nCurrent tasks:");
+    if tasks.is_empty() {
+        println!("No tasks found.");
+    } else {
         for (num, task) in tasks.iter().enumerate() {
-            println!("{}. {task}\n", num+1);
-        }
-
-    }
-
-    else if iter[0] == "Complete" {
-        let task_string = taskiter.join(" ");
-        
-        if let Some(task_pos) = tasks.iter().position(|r| r == &task_string) {
-            tasks[task_pos] = format!("{} [complete]", tasks[task_pos]);
-            println!("Task marked as complete!");
-        } else {
-            println!("Task not found: {}", task_string);
-        }
-    }
-
-    else if iter[0] == "Remove" {
-        let task_string = taskiter.join(" ");
-
-        if let Some(task_pos) = tasks.iter().position(|r|r == &task_string) {
-            println!("Removed task: {task_string}");
-            tasks.remove(task_pos);
-        } else {
-            println!("Task not found: {task_string}");
+            println!("{}. {}", num + 1, task);
         }
     }
 }
