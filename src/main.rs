@@ -1,4 +1,3 @@
-use core::task;
 use std::fs::{OpenOptions, File};
 use std::io::{Write, BufRead, BufReader};
 use std::env;
@@ -14,21 +13,22 @@ fn main() {
         return;
     }
 
-    match iter[0].as_str() {
-        "Add" => add_task(&iter[1..]),
-        "Complete" => complete_task(&iter[1..]),
-        "Remove" => remove_task(&iter[1..]),
-        _ => eprintln!("Invalid command. Use 'Add', 'Complete', or 'Remove'."),
+    match iter[0].to_lowercase().as_str() {
+        "add" => add_task(&iter[1..]),
+        "list" => list_tasks(),
+        "complete" => complete_task(&iter[1..]),
+        "remove" => remove_task(&iter[1..]),
+        _ => eprintln!("Invalid command. Use 'add', 'list', 'complete', or 'remove'."),
     }
 }
 
-//Function to read all tasks from file
+// Function to read all tasks from file
 fn read_tasks() -> Vec<String> {
     let file = File::open(FILE_PATH).unwrap_or_else(|_| File::create(FILE_PATH).expect("Failed to create file"));
     BufReader::new(file).lines().filter_map(Result::ok).collect()
 }
 
-//Function to write tasks back to file (after modification)
+// Function to write tasks back to file (after modification)
 fn write_tasks(tasks: &[String]) {
     let mut file = OpenOptions::new()
         .write(true)
@@ -41,14 +41,14 @@ fn write_tasks(tasks: &[String]) {
     }
 }
 
-//Add Task
+// Add Task
 fn add_task(task_parts: &[String]) {
     if task_parts.is_empty() {
-        eprintln!("Usage: Add <Task>");
+        eprintln!("Usage: add <Task>");
         return;
     }
 
-    let task_string = format!("{} [pending]", task_parts.join(" "));
+    let task_string = format!("[pending] {}", task_parts.join(" "));
 
     let mut file = OpenOptions::new()
         .write(true)
@@ -60,54 +60,11 @@ fn add_task(task_parts: &[String]) {
     writeln!(file, "{}", task_string).expect("Failed to write to file.");
 
     println!("Task added!");
-
-    display_tasks();
+    list_tasks();
 }
 
-//Complete Task
-fn complete_task(task_parts: &[String]) {
-    if task_parts.is_empty() {
-        eprintln!("Usage: Complete <Task>");
-        return;
-    }
-
-    let mut tasks = read_tasks();
-    let search_string = task_parts.join(" ");
-
-    if let Some(pos) = tasks.iter().position(|task| task.starts_with(&search_string)) {
-        tasks[pos] = format!("{} [complete]", search_string);
-        write_tasks(&tasks);
-        println!("Task marked as complete!");
-    } else {
-        println!("Task not found: {}", search_string);
-    }
-
-    display_tasks();
-}
-
-//Remove Task
-fn remove_task(task_parts: &[String]) {
-    if task_parts.is_empty() {
-        eprintln!("Usage: Remove <Task>");
-        return;
-    }
-
-    let mut tasks = read_tasks();
-    let search_string = task_parts.join(" ");
-
-    if let Some(pos) = tasks.iter().position(|task| task.starts_with(&search_string)) {
-        println!("Removed task: {}", tasks[pos]);
-        tasks.remove(pos);
-        write_tasks(&tasks);
-    } else {
-        println!("Task not found: {}", search_string);
-    }
-
-    display_tasks();
-}
-
-//Display All Tasks
-fn display_tasks() {
+// List Tasks
+fn list_tasks() {
     let tasks = read_tasks();
     println!("\nCurrent tasks:");
     if tasks.is_empty() {
@@ -119,6 +76,59 @@ fn display_tasks() {
     }
 }
 
+// Complete Task
+fn complete_task(task_parts: &[String]) {
+    if task_parts.is_empty() {
+        eprintln!("Usage: complete <Task Index>");
+        return;
+    }
+
+    let mut tasks = read_tasks();
+    let task_index: usize = match task_parts[0].parse() {
+        Ok(index) => index,
+        Err(_) => {
+            eprintln!("Invalid task index.");
+            return;
+        }
+    };
+
+    if task_index == 0 || task_index > tasks.len() {
+        eprintln!("Task index out of range.");
+        return;
+    }
+
+    tasks[task_index - 1] = format!("[complete] {}", tasks[task_index - 1].trim_start_matches("[pending] "));
+    write_tasks(&tasks);
+    println!("Task marked as complete!");
+    list_tasks();
+}
+
+// Remove Task
+fn remove_task(task_parts: &[String]) {
+    if task_parts.is_empty() {
+        eprintln!("Usage: remove <Task Index>");
+        return;
+    }
+
+    let mut tasks = read_tasks();
+    let task_index: usize = match task_parts[0].parse() {
+        Ok(index) => index,
+        Err(_) => {
+            eprintln!("Invalid task index.");
+            return;
+        }
+    };
+
+    if task_index == 0 || task_index > tasks.len() {
+        eprintln!("Task index out of range.");
+        return;
+    }
+
+    println!("Removed task: {}", tasks[task_index - 1]);
+    tasks.remove(task_index - 1);
+    write_tasks(&tasks);
+    list_tasks();
+}
 
 //Pseudo Code Planning 
 
