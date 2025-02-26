@@ -1,4 +1,4 @@
-use std::{io::Write, net::{TcpListener, TcpStream}, thread};
+use std::{io::{Read, Write}, net::{TcpListener, TcpStream}, thread};
 
 fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
